@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asim Blogs</title>
+  <style>
+    :root {
+      --bg-light: #f9f9f9;
+      --text-light: #222;
+      --bg-dark: #1e1e1e;
+      --text-dark: #eee;
+      --accent: #007bff;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.4s, color 0.4s;
+    }
+
+    body.dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    header {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    h1 {
+      margin: 0.2rem 0;
+      font-size: 2.2rem;
+    }
+
+    p {
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.6;
+    }
+
+    .toggle-mode {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .toggle-mode:hover {
+      background-color: #0056b3;
+    }
+
+    .section {
+      padding: 2rem 1rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .blog-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .blog-card {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body.dark .blog-card {
+      background-color: rgba(40, 40, 40, 0.9);
+    }
+
+    .blog-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-color: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .blog-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .blog-card:hover {
+      transform: translateY(-5px);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    input, textarea {
+      padding: 0.7rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button[type="submit"] {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.7rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    @media (min-width: 600px) {
+      .blog-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particle-canvas"></canvas>
+  <header>
+    <h1>Asim Blogs</h1>
+    <p>Software Engineering student, MERN stack enthusiast, 4th semester at Islamia College.</p>
+    <button class="toggle-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+  </header>
+
+  <section class="section">
+    <h2>Latest Blog Posts</h2>
+    <div class="blog-grid">
+      <div class="blog-card">
+        <h3>Modern Web Development</h3>
+        <p>Explore the latest trends and tools in modern web development including frameworks, CI/CD, and design systems.</p>
+        <small>May 2025</small>
+      </div>
+      <div class="blog-card">
+        <h3>JavaScript Tips</h3>
+        <p>Here are my favorite tricks and performance tips for writing clean and efficient JavaScript code.</p>
+        <small>May 2025</small>
+      </div>
+      <div class="blog-card">
+        <h3>AI Advancements</h3>
+        <p>Discover how AI is transforming industries, with a focus on recent breakthroughs and ethical considerations.</p>
+        <small>May 2025</small>
+      </div>
+    </div>
+  </section>
+
+  <section class="section contact">
+    <h2>Contact Me</h2>
+    <form>
+      <input type="text" placeholder="Your Name" required />
+      <input type="email" placeholder="Your Email" required />
+      <textarea rows="5" placeholder="Your Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  <footer class="section" style="text-align: center; font-size: 0.9rem; color: gray;">
+    &copy; 2025 Asim Blogs. All rights reserved.
+  </footer>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+    }
+
+    const canvas = document.getElementById("particle-canvas");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    function createParticles() {
+      const total = 100;
+      particles = [];
+      for (let i = 0; i < total; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 2 + 1,
+          speedX: Math.random() * 0.5 - 0.25,
+          speedY: Math.random() * 0.5 - 0.25,
+          opacity: Math.random() * 0.5 + 0.5,
+        });
+      }
+    }
+
+    function drawLines() {
+      const maxDistance = 100;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < maxDistance) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(0, 123, 255, ${1 - dist / maxDistance})`;
+            ctx.lineWidth = 0.5;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const p of particles) {
+        p.x += p.speedX;
+        p.y += p.speedY;
+        if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 123, 255, ${p.opacity})`;
+        ctx.fill();
+      }
+      drawLines();
+      requestAnimationFrame(animateParticles);
+    }
+
+    createParticles();
+    animateParticles();
+  </script>
+</body>
+</html>

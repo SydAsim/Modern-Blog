@@ -2,216 +2,416 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Asim Blogs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Asim Ahmed - Personal Blog</title>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
-      --bg-light: #f9f9f9;
-      --text-light: #222;
-      --bg-dark: #1e1e1e;
-      --text-dark: #eee;
-      --accent: #007bff;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --text-primary: #1e293b;
+      --text-secondary: #64748b;
+      --accent: #3b82f6;
+      --accent-hover: #60a5fa;
+      --border: #e2e8f0;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --header-bg: rgba(255, 255, 255, 0.95);
     }
-
+    [data-theme="dark"] {
+      --bg-primary: #000000;
+      --bg-secondary: #000000;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --accent: #60a5fa;
+      --accent-hover: #3b82f6;
+      --border: #334155;
+      --shadow: rgba(0, 0, 0, 0.3);
+      --card-bg: rgba(30, 41, 59, 0.85);
+      --header-bg: rgba(15, 23, 42, 0.95);
+    }
     body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text-light);
-      transition: background-color 0.4s, color 0.4s;
-    }
-
-    body.dark {
-      background-color: var(--bg-dark);
-      color: var(--text-dark);
-    }
-
-    header {
-      text-align: center;
-      padding: 2rem 1rem;
-    }
-
-    h1 {
-      margin: 0.2rem 0;
-      font-size: 2.2rem;
-    }
-
-    p {
-      max-width: 700px;
-      margin: auto;
+      font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
       line-height: 1.6;
+      color: var(--text-primary);
+      background: var(--bg-primary);
+      transition: 0.3s ease;
+      overflow-x: hidden;
     }
-
-    .toggle-mode {
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background-color: var(--accent);
-      color: #fff;
+    /* Canvas background */
+    #bgCanvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+      transition: background 0.3s ease;
+    }
+    /* Sticky navbar */
+    header {
+      background: var(--header-bg);
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--border);
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+    }
+    .logo h1 {
+      color: var(--accent);
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+    .header-info p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 0.5rem;
+    }
+    .theme-toggle {
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      color: white;
       border: none;
-      border-radius: 5px;
+      padding: 0.8rem 1.8rem;
+      border-radius: 50px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .theme-toggle::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    .theme-toggle:hover::before {
+      left: 100%;
     }
 
-    .toggle-mode:hover {
-      background-color: #0056b3;
+    main { padding: 4rem 0; position: relative; z-index: 1; }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 5rem;
+      animation: fadeInUp 1s ease;
+    }
+    .hero h2 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--text-secondary);
+      font-size: 1.3rem;
+      line-height: 1.8;
     }
 
-    .section {
-      padding: 2rem 1rem;
-      max-width: 1000px;
-      margin: auto;
+    .section-title {
+      font-size: 2.8rem;
+      text-align: center;
+      margin-bottom: 3.5rem;
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px; left: 50%;
+      transform: translateX(-50%);
+      width: 80px; height: 4px;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      border-radius: 2px;
     }
 
     .blog-grid {
       display: grid;
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 2.5rem;
+    }
+    .blog-card {
+      position: relative;
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 40px var(--shadow);
+      border: 1px solid var(--border);
+      transition: transform 0.4s, box-shadow 0.4s, outline-color 0.3s;
+      outline: 2px solid transparent;
+    }
+    .blog-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 20px 60px var(--shadow);
+      outline-color: var(--accent-hover);
+    }
+    .blog-card h3 {
+      color: var(--accent);
+      font-size: 1.6rem;
+      margin-bottom: 1.2rem;
+    }
+    .blog-date {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+    .blog-excerpt {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.8;
     }
 
-    .blog-card {
-      background-color: rgba(255, 255, 255, 0.9);
+    .contact-section {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      padding: 5rem 0;
+      border-radius: 30px;
+      margin: 3rem 0;
+      box-shadow: 0 15px 50px var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .contact-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      background: var(--bg-secondary);
       padding: 1rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease;
+      border-radius: 12px;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .contact-item:hover {
+      background: var(--accent);
+      color: white;
+      transform: translateX(10px);
+    }
+    .contact-item strong {
+      min-width: 80px;
+      margin-right: 1rem;
+    }
+    .contact-form {
+      background: var(--bg-primary);
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px var(--shadow);
+      border: 1px solid var(--border);
+    }
+    .form-group { margin-bottom: 2rem; }
+    .form-group label { display: block; margin-bottom: 0.8rem; font-weight: 600; }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+    }
+    .submit-btn {
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      color: white;
+      border: none;
+      padding: 1.2rem 2.5rem;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100%;
       position: relative;
       overflow: hidden;
     }
-
-    body.dark .blog-card {
-      background-color: rgba(40, 40, 40, 0.9);
-    }
-
-    .blog-card::before {
-      content: "";
+    .submit-btn::before {
+      content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background-color: var(--accent);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s ease;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    .submit-btn:hover::before { left: 100%; }
+
+    footer {
+      text-align: center;
+      padding: 3rem 0;
+      color: var(--text-secondary);
+      border-top: 1px solid var(--border);
     }
 
-    .blog-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .blog-card:hover {
-      transform: translateY(-5px);
-    }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      max-width: 500px;
-      margin: auto;
-    }
-
-    input, textarea {
-      padding: 0.7rem;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-
-    button[type="submit"] {
-      background-color: var(--accent);
-      color: white;
-      border: none;
-      padding: 0.7rem;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    button[type="submit"]:hover {
-      background-color: #0056b3;
-    }
-
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    @media (min-width: 600px) {
-      .blog-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <canvas id="particle-canvas"></canvas>
+  <canvas id="bgCanvas"></canvas>
+
   <header>
-    <h1>Asim Blogs</h1>
-    <p>Software Engineering student, MERN stack enthusiast, 4th semester at Islamia College.</p>
-    <button class="toggle-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    <div class="container header-content">
+      <div class="logo">
+        <h1>Asim Blogs</h1>
+        <div class="header-info">
+          <p>Software Engineering Student | MERN Stack Enthusiast | 4th Semester at Islamia College</p>
+        </div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()">
+        <span id="theme-text">🌙 Dark Mode</span>
+      </button>
+    </div>
   </header>
 
-  <section class="section">
-    <h2>Latest Blog Posts</h2>
-    <div class="blog-grid">
-      <div class="blog-card">
-        <h3>Modern Web Development</h3>
-        <p>Explore the latest trends and tools in modern web development including frameworks, CI/CD, and design systems.</p>
-        <small>May 2025</small>
-      </div>
-      <div class="blog-card">
-        <h3>JavaScript Tips</h3>
-        <p>Here are my favorite tricks and performance tips for writing clean and efficient JavaScript code.</p>
-        <small>May 2025</small>
-      </div>
-      <div class="blog-card">
-        <h3>AI Advancements</h3>
-        <p>Discover how AI is transforming industries, with a focus on recent breakthroughs and ethical considerations.</p>
-        <small>May 2025</small>
-      </div>
+  <main>
+    <div class="container">
+      <section class="hero">
+        <h2>Welcome to My Blog</h2>
+        <p>Exploring the world of software development, sharing insights about modern web technologies, and documenting my journey as a computer science student passionate about creating innovative solutions.</p>
+      </section>
+
+      <section class="blog-section">
+        <h2 class="section-title">Latest Posts</h2>
+        <div class="blog-grid">
+          <article class="blog-card">
+            <h3>Modern Web Development: The MERN Stack Revolution</h3>
+            <p class="blog-date">May 20, 2025</p>
+            <p class="blog-excerpt">Dive deep into the MERN stack ecosystem and discover why MongoDB, Express.js, React, and Node.js have become the go-to choice for full-stack development.</p>
+          </article>
+          <article class="blog-card">
+            <h3>JavaScript Tips That Every Developer Should Know</h3>
+            <p class="blog-date">May 15, 2025</p>
+            <p class="blog-excerpt">From ES6+ features to performance optimization, here are the JavaScript tips and tricks that will elevate your development skills.</p>
+          </article>
+          <article class="blog-card">
+            <h3>AI Advancements: Shaping the Future of Software Development</h3>
+            <p class="blog-date">May 10, 2025</p>
+            <p class="blog-excerpt">Explore the latest AI tools for developers, from GitHub Copilot to automated testing, and learn how to integrate ML into web apps.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="contact-section">
+        <h2 class="section-title">Get In Touch</h2>
+        <div class="contact-content">
+          <div class="contact-info">
+            <h3>Let's Connect!</h3>
+            <p>I'm always excited to discuss technology or collaborate on projects.</p>
+            <div class="contact-item"><strong>Email:</strong> syedasim2021@gmail.com</div>
+            <div class="contact-item"><strong>Location:</strong> Islamia College, Pakistan</div>
+            <div class="contact-item"><strong>Focus:</strong> MERN Stack, AI/ML, Open Source</div>
+          </div>
+          <form class="contact-form" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input id="name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+              <label for="message">Your Message</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message</button>
+          </form>
+        </div>
+      </section>
     </div>
-  </section>
+  </main>
 
-  <section class="section contact">
-    <h2>Contact Me</h2>
-    <form>
-      <input type="text" placeholder="Your Name" required />
-      <input type="email" placeholder="Your Email" required />
-      <textarea rows="5" placeholder="Your Message" required></textarea>
-      <button type="submit">Send</button>
-    </form>
-  </section>
-
-  <footer class="section" style="text-align: center; font-size: 0.9rem; color: gray;">
-    &copy; 2025 Asim Blogs. All rights reserved.
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Asim. Built with passion for web development.</p>
+    </div>
   </footer>
 
   <script>
-    function toggleDarkMode() {
-      document.body.classList.toggle("dark");
+    // Theme toggle, form submission, scroll-reveal & parallax
+    function toggleTheme() {
+      const body = document.body;
+      const themeText = document.getElementById('theme-text');
+      if (body.getAttribute('data-theme') === 'dark') {
+        body.removeAttribute('data-theme');
+        themeText.textContent = '🌙 Dark Mode';
+      } else {
+        body.setAttribute('data-theme', 'dark');
+        themeText.textContent = '☀️ Light Mode';
+      }
     }
+    function handleSubmit(event) {
+      event.preventDefault();
+      const btn = event.target.querySelector('.submit-btn');
+      const orig = btn.textContent;
+      btn.textContent = 'Sending...';
+      setTimeout(() => {
+        alert('Thanks! Your message was sent.');
+        btn.textContent = orig;
+        event.target.reset();
+      }, 1500);
+    }
+    function revealOnScroll() {
+      document.querySelectorAll('.scroll-reveal').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 150) {
+          el.classList.add('revealed');
+        }
+      });
+    }
+    function handleParallax() {
+      const hero = document.querySelector('.hero');
+      if (hero) hero.style.transform = `translate3d(0, ${window.pageYOffset * -0.3}px, 0)`;
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.setAttribute('data-theme','dark');
+        document.getElementById('theme-text').textContent='☀️ Light Mode';
+      }
+      window.addEventListener('scroll', () => {
+        revealOnScroll();
+        handleParallax();
+      });
+      revealOnScroll();
+    });
+  </script>
 
-    const canvas = document.getElementById("particle-canvas");
-    const ctx = canvas.getContext("2d");
+  <script>
+    // Particle animation
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
     let particles = [];
-
     function resizeCanvas() {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     }
+    window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
     function createParticles() {
-      const total = 100;
       particles = [];
-      for (let i = 0; i < total; i++) {
+      for (let i = 0; i < 100; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
@@ -222,14 +422,13 @@
         });
       }
     }
-
     function drawLines() {
       const maxDistance = 100;
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+          const dist = Math.hypot(dx, dy);
           if (dist < maxDistance) {
             ctx.beginPath();
             ctx.strokeStyle = `rgba(0, 123, 255, ${1 - dist / maxDistance})`;
@@ -241,10 +440,9 @@
         }
       }
     }
-
     function animateParticles() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const p of particles) {
+      particles.forEach(p => {
         p.x += p.speedX;
         p.y += p.speedY;
         if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
@@ -253,11 +451,10 @@
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(0, 123, 255, ${p.opacity})`;
         ctx.fill();
-      }
+      });
       drawLines();
       requestAnimationFrame(animateParticles);
     }
-
     createParticles();
     animateParticles();
   </script>

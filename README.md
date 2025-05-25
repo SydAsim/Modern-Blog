@@ -1,2 +1,2 @@
-##link [https://sydasim.github.io/Modern-Blog/]
+#link
 # Modern-Blog
