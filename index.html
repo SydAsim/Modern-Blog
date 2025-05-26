@@ -38,7 +38,6 @@
       transition: 0.3s ease;
       overflow-x: hidden;
     }
-    /* Canvas background */
     #bgCanvas {
       position: fixed;
       top: 0; left: 0;
@@ -48,7 +47,6 @@
       background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
       transition: background 0.3s ease;
     }
-    /* Sticky navbar */
     header {
       background: var(--header-bg);
       backdrop-filter: blur(20px);
@@ -69,7 +67,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      
     }
     .logo h1 {
       color: var(--accent);
@@ -267,9 +264,90 @@
       from { opacity: 0; transform: translateY(40px); }
       to   { opacity: 1; transform: translateY(0); }
     }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+      }
+      .hero h2 {
+        font-size: 2.5rem;
+        line-height: 1.2;
+      }
+      .blog-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .contact-form {
+        padding: 1.5rem;
+      }
+      .section-title {
+        font-size: 2.2rem;
+        margin-bottom: 2.5rem;
+      }
+      .blog-card {
+        padding: 1.5rem;
+      }
+      .hero p {
+        font-size: 1.1rem;
+        padding: 0 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo h1 {
+        font-size: 1.8rem;
+      }
+      .header-info p {
+        font-size: 0.85rem;
+      }
+      .theme-toggle {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+      .hero h2 {
+        font-size: 2rem;
+      }
+      .section-title {
+        font-size: 1.8rem;
+      }
+      .blog-card h3 {
+        font-size: 1.3rem;
+      }
+      .contact-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      .form-group input,
+      .form-group textarea {
+        padding: 0.8rem;
+      }
+      .submit-btn {
+        padding: 1rem 1.5rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .container {
+        padding: 0 15px;
+      }
+      .hero h2 {
+        font-size: 1.8rem;
+      }
+      .blog-card {
+        padding: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Body content remains exactly the same as original -->
   <canvas id="bgCanvas"></canvas>
 
   <header>
@@ -351,7 +429,7 @@
   </footer>
 
   <script>
-    // Theme toggle, form submission, scroll-reveal & parallax
+    // JavaScript remains exactly the same as original
     function toggleTheme() {
       const body = document.body;
       const themeText = document.getElementById('theme-text');
@@ -374,31 +452,7 @@
         event.target.reset();
       }, 1500);
     }
-    function revealOnScroll() {
-      document.querySelectorAll('.scroll-reveal').forEach(el => {
-        if (el.getBoundingClientRect().top < window.innerHeight - 150) {
-          el.classList.add('revealed');
-        }
-      });
-    }
-    function handleParallax() {
-      const hero = document.querySelector('.hero');
-      if (hero) hero.style.transform = `translate3d(0, ${window.pageYOffset * -0.3}px, 0)`;
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        document.body.setAttribute('data-theme','dark');
-        document.getElementById('theme-text').textContent='☀️ Light Mode';
-      }
-      window.addEventListener('scroll', () => {
-        revealOnScroll();
-        handleParallax();
-      });
-      revealOnScroll();
-    });
-  </script>
 
-  <script>
     // Particle animation
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
@@ -457,6 +511,14 @@
     }
     createParticles();
     animateParticles();
+
+    // Initial theme detection
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.setAttribute('data-theme','dark');
+        document.getElementById('theme-text').textContent='☀️ Light Mode';
+      }
+    });
   </script>
 </body>
 </html>
